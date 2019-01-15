@@ -404,7 +404,7 @@ namespace eosio {
             auto last_pending_schedule_version = _prodsches.get( last_bhs.pending_schedule_id ).schedule.version;
             if ( header.schedule_version == last_pending_schedule_version ){  // producers replacement finished
                /* important! infact header_block_num - last_section.newprod_block_num should be approximately equal to 325 */
-//               eosio_assert( header_block_num - last_section.newprod_block_num > 20 * 12, "header_block_num - last_section.newprod_block_num > 20 * 12 failed");
+               eosio_assert( header_block_num - last_section.newprod_block_num > 20 * 12, "header_block_num - last_section.newprod_block_num > 20 * 12 failed");
                bhs.active_schedule_id  = last_bhs.pending_schedule_id;
             } else { // producers replacement not finished
                bhs.active_schedule_id  = last_bhs.active_schedule_id;
@@ -541,7 +541,6 @@ namespace eosio {
          return;
       }
 
-      return;
       // section create
       if ( producers.empty() ){
          eosio_assert( block_nums.empty(), "internal error, producers not consistent with block_nums" );
