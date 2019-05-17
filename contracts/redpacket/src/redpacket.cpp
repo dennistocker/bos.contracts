@@ -331,11 +331,19 @@ void redpacket::_ping()
     uint64_t id = it->id;
     name contract = _contract_for_symbol(it->amount.symbol);
     string memo = _self.to_string() + ": remain balance for redpacket " + std::to_string(id);
+    // compatible with uid
+    std::string uid = ".uid";
+    name real_to = it->sender;;
+    string real_memo = memo;
+    if (has_suffix(real_to.to_string(), uid)) {
+        real_to = name{"uid"};
+        real_memo = "tf^" + it->sender.to_string() + "^" + memo;
+    }
     transaction out;
     out.actions.emplace_back(permission_level{_self, name{"active"}},
             contract,
             name{"transfer"},
-            std::make_tuple(_self, it->sender, it->get_remain(), memo));
+            std::make_tuple(_self, real_to, it->get_remain(), real_memo));
     out.delay_sec = 0;
     uint128_t sender_id = uint128_t(id) << 64 | 2;
     cancel_deferred(sender_id);
